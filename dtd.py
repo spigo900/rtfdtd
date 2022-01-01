@@ -13,17 +13,17 @@ def roll_d100() -> int:
     """
     Roll a single d100 die.
     """
-    return random.randint(1, D100_SIDES + 1)
+    return random.randint(1, D100_SIDES)
 
 
 def roll_die(*, explodes: bool = True) -> int:
     """
     Roll a die, optionally exploding when we roll a 10.
     """
-    result = roll = random.randint(1, SIDES + 1)
+    result = roll = random.randint(1, SIDES)
     if explodes:
         while roll == SIDES:
-            roll = random.randint(1, SIDES + 1)
+            roll = random.randint(1, SIDES)
             result += roll
     return result
 
