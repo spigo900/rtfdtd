@@ -5,16 +5,16 @@ from dtd import roll_dice, calculate_value
 
 def test_roll_die():
     random.seed(42)
-    rolls = roll_dice(1)
+    rolls = roll_dice(1, explodes=True)
     assert len(rolls) == 1
-    assert rolls[0] == 11
+    assert rolls[0] == 2
 
 
 def test_roll_dice():
     random.seed(42)
-    rolls = roll_dice(10)
+    rolls = roll_dice(10, explodes=True)
     assert len(rolls) == 10
-    assert rolls[0] == 11
+    assert rolls[0] == 2
 
 
 def test_calculate_value():
