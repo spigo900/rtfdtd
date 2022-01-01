@@ -37,7 +37,7 @@ async def on_roll(message: discord.Message, n_roll: int, n_keep: int) -> None:
     """
     Logic for the /roll command.
     """
-    rolls = roll_dice(n_roll)
+    rolls = roll_dice(n_roll, explodes=True)
     value = calculate_value(rolls, n_keep)
     message.channel.send(
         f"Rolled: {value}\n\n"
