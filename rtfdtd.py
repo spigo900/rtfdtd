@@ -6,7 +6,7 @@ from pathlib import Path
 
 import discord
 
-from dtd import roll_dice, calculate_value
+from dtd import roll_d100, roll_dice, calculate_value
 
 
 CONFIG_PATH = Path("./config.json")
@@ -29,13 +29,19 @@ async def on_message(message: discord.Message) -> None:
     if message.content.startswith("/roll"):
         parts = message.content.lower().strip().split()
         roll_expr = parts[1]
-        n_roll, n_keep = [int(subexpr) for subexpr in roll_expr.split("k")]
-        on_roll(message, n_roll, n_keep)
+
+        if "k" in parts[1]:
+            n_roll, n_keep = [int(subexpr) for subexpr in roll_expr.split("k")]
+            on_roll(message, n_roll, n_keep)
+        elif parts[1] == "d100":
+            on_d100(message)
 
 
 async def on_roll(message: discord.Message, n_roll: int, n_keep: int) -> None:
     """
-    Logic for the /roll command.
+    Logic for the d10-rolling parts of the /roll command.
+
+    This handles rolling things like skill checks.
     """
     rolls = roll_dice(n_roll, explodes=True)
     value = calculate_value(rolls, n_keep)
@@ -43,6 +49,16 @@ async def on_roll(message: discord.Message, n_roll: int, n_keep: int) -> None:
         f"Rolled: {value}\n\n"
         f"(sorted rolls {', '.join(sorted(rolls))} || roll order {', '.join(rolls)})"
     )
+
+
+async def on_d100(message: discord.Message, n_roll: int, n_keep: int) -> None:
+    """
+    Logic for the d100/percentile-rolling parts of the /roll command.
+
+    This handles things like rolling credit checks, or rolling on the Wizard's
+    Twilight table.
+    """
+    message.channel.send(f"Rolled d100: {roll_d100()}")
 
 
 if __name__ == "__main__":

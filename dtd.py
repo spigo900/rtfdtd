@@ -6,6 +6,14 @@ from typing import Sequence
 
 
 SIDES = 10
+D100_SIDES = 100
+
+
+def roll_d100() -> int:
+    """
+    Roll a single d100 die.
+    """
+    return random.randint(1, D100_SIDES + 1)
 
 
 def roll_die(*, explodes: bool = True) -> int:
