@@ -49,7 +49,7 @@ async def on_message(message: discord.Message) -> None:
         print(f"Got roll command: {message.content}")
         parts = message.content.lower().strip().split()
 
-        # Command is of the form !r X Y attributes
+        # Command is of the form !r X Y [attributes]
         if 3 <= len(parts) <= 4:
             x, y = [int(part) for part in parts[1:3]]  # pylint: disable=invalid-name
             attributes = parts[3] if len(parts) > 3 else ""
