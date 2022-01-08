@@ -33,9 +33,9 @@ async def on_message(message: discord.Message) -> None:
 
         if "k" in parts[1]:
             n_roll, n_keep = [int(subexpr) for subexpr in roll_expr.split("k")]
-            on_roll(message, n_roll, n_keep)
+            await on_roll(message, n_roll, n_keep)
         elif parts[1] == "d100":
-            on_d100(message)
+            await on_d100(message)
 
 
 async def on_roll(message: discord.Message, n_roll: int, n_keep: int) -> None:
@@ -46,7 +46,7 @@ async def on_roll(message: discord.Message, n_roll: int, n_keep: int) -> None:
     """
     rolls = roll_dice(n_roll, explodes=True)
     value = calculate_value(rolls, n_keep)
-    message.channel.send(
+    await message.channel.send(
         f"Rolled: {value}\n\n"
         f"(sorted rolls {', '.join(sorted(rolls))} || roll order {', '.join(rolls)})"
     )
@@ -59,7 +59,7 @@ async def on_d100(message: discord.Message, n_roll: int, n_keep: int) -> None:
     This handles things like rolling credit checks, or rolling on the Wizard's
     Twilight table.
     """
-    message.channel.send(f"Rolled d100: {roll_d100()}")
+    await message.channel.send(f"Rolled d100: {roll_d100()}")
 
 
 if __name__ == "__main__":
