@@ -27,3 +27,27 @@ def test_calculate_value():
     assert calculate_value([6, 6, 6, 1, 4, 2], 1) == 6
     assert calculate_value([10, 6, 6, 1, 4, 2], 1) == 10
     assert calculate_value([6, 10, 6, 1, 4, 2], 1) == 10
+
+
+def test_calculate_value_with_simple():
+    assert calculate_value([1, 1, 1, 6, 6, 6], 6, attributes="-") == 17
+    assert calculate_value([1, 1, 1, 6, 6, 6], 3, attributes="+") == 22
+    assert calculate_value([6, 6, 6, 1, 4, 2], 3, attributes="o") == 18
+    assert calculate_value([10, 6, 6, 1, 4, 2], 3, attributes="x") == 44
+    assert calculate_value([6, 10, 6, 1, 4, 2], 3, attributes="/") == 7
+    assert calculate_value([1, 1, 1, 6, 6, 6], 1, attributes="//") == 3
+    assert calculate_value([6, 6, 6, 1, 4, 2], 1, attributes="xx") == 24
+    assert calculate_value([10, 6, 6, 1, 4, 2], 1, attributes="++") == 18
+    assert calculate_value([6, 10, 6, 1, 4, 2], 1, attributes="--") == 2
+
+
+def test_calculate_value_with_modifiers():
+    assert calculate_value([1, 1, 1, 6, 6, 6], 6, attributes="/") == 7
+    assert calculate_value([1, 1, 1, 6, 6, 6], 3, attributes="-/") == 4
+    assert calculate_value([6, 6, 6, 1, 4, 2], 3, attributes="-") == 14
+    assert calculate_value([10, 6, 6, 1, 4, 2], 3, attributes="---o+") == 18
+    assert calculate_value([6, 10, 6, 1, 4, 2], 3, attributes="o") == 22
+    assert calculate_value([1, 1, 1, 6, 6, 6], 1, attributes="o+") == 10
+    assert calculate_value([6, 6, 6, 1, 4, 2], 1, attributes="x") == 12
+    assert calculate_value([10, 6, 6, 1, 4, 2], 1, attributes="x//") == 3
+    assert calculate_value([6, 10, 6, 1, 4, 2], 1, attributes="xx/") == 20
