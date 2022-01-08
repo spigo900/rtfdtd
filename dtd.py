@@ -38,7 +38,8 @@ def roll_dice(n_roll: int, *, explodes: bool) -> Sequence[int]:
 
 def calculate_value(rolls: Sequence[int], n_keep: int, *, attributes: str = "") -> int:
     """
-    Calculate the value of a dice roll, given the rolls and number to keep.
+    Calculate the value of a dice roll, given the rolls, number to keep, and
+    attributes.
     """
     in_order = sorted(rolls)
     effective_negatives = max(attributes.count("-") - attributes.count("o"), 0)
