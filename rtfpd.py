@@ -104,8 +104,8 @@ async def on_roll(
     await message.channel.send(
         f"Rolled: {value}{' (' + ' '.join(flag_messages) + ')' if flag_messages else ''}\n\n"
         f"(sorted rolls {', '.join(str(roll) for roll in sorted(focus_roll.rolls, reverse=True))}\n"
-        f"|| roll order {', '.join(str(roll) for roll in focus_roll.rolls)}\n"
-        f"|| before applying F attribute {', '.join(str(roll) for roll in base_rolls)})"
+        f"| roll order {', '.join(str(roll) for roll in focus_roll.rolls)}\n"
+        f"| before applying F attribute {', '.join(str(roll) for roll in base_rolls)})"
     )
 
 
