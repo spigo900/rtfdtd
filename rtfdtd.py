@@ -10,6 +10,11 @@ from dtd import roll_d100, roll_dice, calculate_value
 
 
 CONFIG_PATH = Path("./config.json")
+# N keep M notation (e.g. 6k2) is undocumented 'cause it's legacy :P
+HELP = """Commands: !roll (aka !r), !help
+
+- Use !r X Y [attributes] to make a normal Past Due roll.
+- Use !r d100 to roll a d100."""
 
 client = discord.Client()
 
@@ -26,7 +31,9 @@ async def on_message(message: discord.Message) -> None:
     if not message.content.startswith("!"):
         return
 
-    if message.content.startswith("!roll") or message.content.startswith("!r"):
+    if message.content.startswith("!help"):
+        await message.channel.send(HELP)
+    elif message.content.startswith("!roll") or message.content.startswith("!r"):
         print(f"Got roll command: {message.content}")
         parts = message.content.lower().strip().split()
         roll_expr = parts[1]
