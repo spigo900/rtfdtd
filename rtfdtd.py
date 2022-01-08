@@ -44,7 +44,7 @@ async def on_roll(message: discord.Message, n_roll: int, n_keep: int) -> None:
 
     This handles rolling things like skill checks.
     """
-    rolls = roll_dice(n_roll, explodes=True)
+    rolls = roll_dice(n_roll, explodes=n_keep > 0)
     value = calculate_value(rolls, n_keep)
     await message.channel.send(
         f"Rolled: {value}\n\n"
