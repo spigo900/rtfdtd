@@ -20,7 +20,9 @@ CONFIG_PATH = Path("./config.json")
 HELP = """Commands: !roll (aka !r), !help
 
 - Use !r X Y [attributes] to make a normal Past Due roll.
-- Use !r d100 to roll a d100."""
+- Use !r d100 to roll a d100.
+
+Use 'o' for the ⊕ attribute."""
 NAUGHTY = "... Nice try."
 BAD_ROLL_COMMAND = """Unrecognized roll command syntax.
 
