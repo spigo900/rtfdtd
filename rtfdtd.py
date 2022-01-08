@@ -26,7 +26,8 @@ async def on_message(message: discord.Message) -> None:
     if not message.content.startswith("!"):
         return
 
-    if message.content.startswith("/roll"):
+    if message.content.startswith("!roll") or message.content.startswith("!r"):
+        print(f"Got roll command: {message.content}")
         parts = message.content.lower().strip().split()
         roll_expr = parts[1]
 
