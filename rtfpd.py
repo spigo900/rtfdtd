@@ -50,7 +50,7 @@ async def on_message(message: discord.Message) -> None:
         # Command is of the form !r X Y attributes
         if len(parts) == 4:
             raw_x, raw_y, attributes = parts[1:]
-            x, y = int(raw_x), int(raw_y)
+            x, y = int(raw_x), int(raw_y)  # pylint: disable=invalid-name
             n_roll, n_keep = max(x, y), min(x, y)
             if sanity_check_roll(n_roll, n_keep, attributes=attributes):
                 await on_roll(message, n_roll, n_keep, attributes=attributes)
@@ -97,7 +97,8 @@ async def on_roll(
         flag_messages.append("stress, bad things!")
     await message.channel.send(
         f"Rolled: {value}{' (' + ' '.join(flag_messages) + ')' if flag_messages else ''}\n\n"
-        f"(sorted rolls {', '.join(str(roll) for roll in sorted(rolls, reverse=True))} || roll order {', '.join(str(roll) for roll in rolls)})"
+        f"(sorted rolls {', '.join(str(roll) for roll in sorted(rolls, reverse=True))} "
+        f"|| roll order {', '.join(str(roll) for roll in rolls)})"
     )
 
 
