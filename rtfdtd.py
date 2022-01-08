@@ -6,7 +6,7 @@ from pathlib import Path
 
 import discord
 
-from dtd import roll_d100, roll_dice, calculate_value, SIDES
+from dtd import roll_d100, roll_dice, calculate_value, stress_check_for_bad_things, SIDES
 
 
 CONFIG_PATH = Path("./config.json")
@@ -79,11 +79,17 @@ async def on_roll(message: discord.Message, n_roll: int, n_keep: int, *, attribu
     This handles rolling things like skill checks.
     """
     rolls = roll_dice(n_roll, explodes=n_keep > 0)
+    bad_things = stress_check_for_bad_things(rolls, n_keep, attributes=attributes)
     phenomenon_roll = "f" in attributes
     n_twos = len([roll for roll in rolls if (roll % SIDES) == 2])
-    value = calculate_value(rolls, n_keep, attributes=((2 ** n_twos) if phenomenal else 1) * attributes)
+    value = calculate_value(rolls, n_keep, attributes=((2 ** n_twos) if phenomenon_roll else 1) * attributes)
+    flag_messages = []
+    if phenomenon_roll and n_twos > 0:
+        flag_messages.append("phenomal!")
+    if bad_things:
+        flag_messages.append("stress, bad things!")
     await message.channel.send(
-        f"Rolled: {value}{' (phenomenal!)' if phenomenon_roll and n_twos > 0 else ''}\n\n"
+        f"Rolled: {value}{' (' + ' '.join(flag_messages) + ')' if flag_messages else ''}\n\n"
         f"(sorted rolls {', '.join(str(roll) for roll in sorted(rolls, reverse=True))} || roll order {', '.join(str(roll) for roll in rolls)})"
     )
 
