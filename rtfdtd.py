@@ -45,7 +45,7 @@ async def on_message(message: discord.Message) -> None:
         if len(parts) == 4:
             raw_x, raw_y, attributes = parts[1:]
             x, y = int(raw_x), int(raw_y)
-            n_roll, n_keep = min(x, y), max(x, y)
+            n_roll, n_keep = max(x, y), min(x, y)
             if sanity_check_roll(n_roll, n_keep, attributes=attributes):
                 await on_roll(message, n_roll, n_keep, attributes=attributes)
             else:
