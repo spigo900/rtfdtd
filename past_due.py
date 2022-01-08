@@ -115,7 +115,6 @@ def handle_focus_for_roll(rolls: Sequence[int], attributes: str) -> RollWithFocu
     phenomenality = 0
     if "f" in attributes:
         for roll in rolls:
-            print()
             new_roll = roll
             reroll_count = 0
             # Note that because rolls only explode on a 10, we can write
