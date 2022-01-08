@@ -11,7 +11,7 @@ from past_due import (
     roll_dice,
     calculate_value,
     stress_check_for_bad_things,
-    calculate_focus_roll,
+    handle_focus_for_roll,
 )
 
 
@@ -89,7 +89,7 @@ async def on_roll(
     This handles rolling things like skill checks.
     """
     base_rolls = roll_dice(n_roll, explodes=n_keep > 0)
-    focus_roll = calculate_focus_roll(base_rolls, attributes)
+    focus_roll = handle_focus_for_roll(base_rolls, attributes)
     bad_things = stress_check_for_bad_things(focus_roll.rolls, n_keep, attributes=attributes)
     value = calculate_value(focus_roll.rolls, n_keep, attributes=(2 ** focus_roll.phenomenality) * attributes)
     flag_messages = []

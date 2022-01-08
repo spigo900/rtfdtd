@@ -1,6 +1,6 @@
 import random
 
-from past_due import calculate_focus_roll, roll_dice, calculate_value, stress_check_for_bad_things
+from past_due import handle_focus_for_roll, roll_dice, calculate_value, stress_check_for_bad_things
 
 
 def test_roll_die():
@@ -66,10 +66,10 @@ def test_calculate_value_with_stress():
 
 def test_calculate_value_with_stress():
     original_rolls = (1, 1, 12, 2, 6, 6)
-    focus_roll = calculate_focus_roll(original_rolls, attributes="")
+    focus_roll = handle_focus_for_roll(original_rolls, attributes="")
     assert focus_roll.rolls == original_rolls
     assert focus_roll.phenomenality == 0
 
-    focus_roll = calculate_focus_roll(original_rolls, attributes="f")
+    focus_roll = handle_focus_for_roll(original_rolls, attributes="f")
     assert focus_roll.rolls == (1, 1, 11, 1, 6, 6)
     assert focus_roll.phenomenality == 2

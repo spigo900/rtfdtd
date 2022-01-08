@@ -81,9 +81,11 @@ def _num_ones_for_stress(n_roll: int, n_keep: int) -> int:
 
 
 @dataclass(frozen=True)
-class ResolvedFocusRoll:
+class RollWithFocusResolved:
     """
-    Holds the result of resolving a focus (or phenomenon) roll.
+    Holds the result of handling focus for a roll.
+
+    Note that `rolls` can include twos for regular (i.e. non-focus) rolls.
 
     This includes the rerolls (as rolls) and the reroll counts for each die.
     It also includes the number of twos rolled in the rerolling process (the
@@ -94,12 +96,16 @@ class ResolvedFocusRoll:
     phenomenality: int
 
 
-def calculate_focus_roll(rolls: Sequence[int], attributes: str) -> ResolvedFocusRoll:
+def handle_focus_for_roll(rolls: Sequence[int], attributes: str) -> RollWithFocusResolved:
     """
-    Calculate the phenomenality of the given raw roll.
+    Handles focus for the given roll if needed.
 
-    For a focus roll (i.e. one with the F modifier), the phenomenality is
-    the number of twos rolled. For all others the phenomenality is 0.
+    For non-focus rolls this does nothing to the rolls, and the phenomenality
+    is zero.
+
+    For a focus roll (i.e. one with the F modifier), twos are rerolled
+    recursively and the phenomenality is the total number of twos rolled
+    (including on rerolls).
     """
     # Calculate phenomenality.
     #
@@ -131,7 +137,7 @@ def calculate_focus_roll(rolls: Sequence[int], attributes: str) -> ResolvedFocus
         new_rolls = rolls
         reroll_counts = [0 for _ in rolls]
 
-    return ResolvedFocusRoll(
+    return RollWithFocusResolved(
         rolls=tuple(new_rolls),
         reroll_counts=tuple(reroll_counts),
         phenomenality=phenomenality,
