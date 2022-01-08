@@ -1,6 +1,7 @@
 """
 Dice rolling and calculations for Past Due.
 """
+from math import ceil
 import random
 from typing import Sequence
 
@@ -53,3 +54,21 @@ def _apply_mul(value_plus_add_mod: int, *, attributes: str) -> int:
         return value_plus_add_mod
     else:
         return value_plus_add_mod // (3 * -mul_offset)
+
+
+def stress_check_for_bad_things(rolls: Sequence[int], n_keep: int, *, attributes: str) -> bool:
+    """
+    Check if Bad Things happen due to stress.
+
+    This checks for the stress attribute; if it's not present then this always
+    returns false.
+    """
+    return "s" in attributes and len([x for x in rolls if x == 1]) >= _num_ones_for_stress(len(rolls), n_keep)
+
+
+def _num_ones_for_stress(n_roll: int, n_keep: int) -> int:
+    """
+    Calculate the minimum number of ones for a bad effect on a stressed roll.
+    """
+    print("DEBUG:", max(ceil(n_roll / 2), n_keep))
+    return max(ceil(n_roll / 2), n_keep)

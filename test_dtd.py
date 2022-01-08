@@ -51,3 +51,14 @@ def test_calculate_value_with_modifiers():
     assert calculate_value([6, 6, 6, 1, 4, 2], 1, attributes="x") == 12
     assert calculate_value([10, 6, 6, 1, 4, 2], 1, attributes="x//") == 3
     assert calculate_value([6, 10, 6, 1, 4, 2], 1, attributes="xx/") == 20
+
+
+def test_calculate_value_with_stress():
+    assert not stress_check_for_bad_things([1, 1, 1, 6, 6, 6], 6, attributes="")
+    assert not stress_check_for_bad_things([1, 1, 1, 6, 6, 6], 6, attributes="s")
+    assert stress_check_for_bad_things([1, 1, 1, 6, 6, 6], 3, attributes="s")
+    assert stress_check_for_bad_things([1, 1, 1, 6, 6, 6], 3, attributes="s-/")
+    assert stress_check_for_bad_things([1, 1, 1, 6, 6, 6], 2, attributes="s-/")
+    assert not stress_check_for_bad_things([1, 1, 1, 6, 6, 6], 4, attributes="s-/")
+    assert not stress_check_for_bad_things([1, 1, 6, 6, 6, 6], 3, attributes="s-/")
+    assert not stress_check_for_bad_things([6, 10, 6, 1, 4, 2], 3, attributes="s")
