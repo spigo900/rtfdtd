@@ -1,6 +1,6 @@
 import random
 
-from dtd import roll_dice, calculate_value, stress_check_for_bad_things
+from past_due import roll_dice, calculate_value, stress_check_for_bad_things
 
 
 def test_roll_die():

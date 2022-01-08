@@ -6,7 +6,7 @@ from pathlib import Path
 
 import discord
 
-from dtd import roll_d100, roll_dice, calculate_value, stress_check_for_bad_things, calculate_phenomenality
+from past_due import roll_d100, roll_dice, calculate_value, stress_check_for_bad_things, calculate_phenomenality
 
 
 CONFIG_PATH = Path("./config.json")
