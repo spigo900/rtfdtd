@@ -52,7 +52,7 @@ async def on_roll(message: discord.Message, n_roll: int, n_keep: int) -> None:
     )
 
 
-async def on_d100(message: discord.Message, n_roll: int, n_keep: int) -> None:
+async def on_d100(message: discord.Message) -> None:
     """
     Logic for the d100/percentile-rolling parts of the /roll command.
 
