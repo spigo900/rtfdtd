@@ -155,4 +155,4 @@ cython_debug/
 .vscode/
 
 # Config file
-./config.json
+config.json
