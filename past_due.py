@@ -1,6 +1,7 @@
 """
 Dice rolling and calculations for Past Due.
 """
+from dataclasses import dataclass
 from math import ceil
 import random
 from typing import Sequence
@@ -79,13 +80,50 @@ def _num_ones_for_stress(n_roll: int, n_keep: int) -> int:
     return max(ceil(n_roll / 2), n_keep)
 
 
-def calculate_phenomenality(rolls: Sequence[int], attributes: str) -> int:
+@dataclass(frozen=True)
+class ResolvedFocusRoll:
     """
-    Calculate the phenomenality of the given roll.
+    Holds the result of resolving a focus (or phenomenon) roll.
 
-    For a phenomenal roll (i.e. one with the F modifier), the phenomenality is
+    This
+    """
+    rolls: Sequence[int]
+    phenomenality: int
+
+
+def calculate_focus_roll(rolls: Sequence[int], attributes: str) -> ResolvedFocusRoll:
+    """
+    Calculate the phenomenality of the given raw roll.
+
+    For a focus roll (i.e. one with the F modifier), the phenomenality is
     the number of twos rolled. For all others the phenomenality is 0.
     """
-    return (
-        len([roll for roll in rolls if (roll % SIDES) == 2]) if "f" in attributes else 0
+    # Calculate phenomenality.
+    #
+    # I include "or 10" in case of non-exploding focus rolls.
+    new_rolls = []
+    phenomenality = 0
+    if "f" in attributes:
+        for roll in rolls:
+            print()
+            reroll = roll
+            # Note that because rolls only explode on a 10, we can write
+            # (re)roll = 10 * q + r, where q is the number of explosions
+            # and 1 <= r < 10 is the last number rolled. Thus modding by 10 gives
+            # us r, the last number rolled.
+            while (reroll % 10) == 2:
+                phenomenality += 1
+                # Reroll with explosions... I assume that's how this is supposed to
+                # work, because the rules don't say otherwise.
+                die = roll_die(explodes=True)
+                # Also subtract two to get rid of the 2 roll, which I believe
+                # doesn't count towards the total.
+                reroll += die - 2
+            new_rolls.append(reroll)
+    else:
+        new_rolls = rolls
+
+    return ResolvedFocusRoll(
+        rolls=tuple(new_rolls),
+        phenomenality=phenomenality,
     )
