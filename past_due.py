@@ -93,6 +93,10 @@ class ResolvedFocusRoll:
     reroll_counts: Sequence[int]
     phenomenality: int
 
+    def __post_init__(self):
+        if any((roll % SIDES) == 2 for roll in self.rolls):
+            raise ValueError(f"A resolved focus roll cannot include any twos!")
+
 
 def calculate_focus_roll(rolls: Sequence[int], attributes: str) -> ResolvedFocusRoll:
     """
