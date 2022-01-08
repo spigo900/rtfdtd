@@ -89,12 +89,13 @@ async def on_roll(
     This handles rolling things like skill checks.
     """
     rolls = roll_dice(n_roll, explodes=n_keep > 0)
-    rolls, phenomenality = calculate_focus_roll(rolls, attributes)
+    focus_roll = calculate_focus_roll(rolls, attributes)
+    rolls = focus_roll.rolls
     bad_things = stress_check_for_bad_things(rolls, n_keep, attributes=attributes)
-    value = calculate_value(rolls, n_keep, attributes=(2 ** phenomenality) * attributes)
+    value = calculate_value(rolls, n_keep, attributes=(2 ** focus_roll.phenomenality) * attributes)
     flag_messages = []
-    if phenomenality > 0:
-        flag_messages.append(f"phenomal! {phenomenality} twos.")
+    if focus_roll.phenomenality > 0:
+        flag_messages.append(f"phenomal! {focus_roll.phenomenality} twos.")
     if bad_things:
         flag_messages.append("stress, bad things!")
     await message.channel.send(
