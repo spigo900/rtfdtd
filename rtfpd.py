@@ -50,9 +50,9 @@ async def on_message(message: discord.Message) -> None:
         parts = message.content.lower().strip().split()
 
         # Command is of the form !r X Y attributes
-        if len(parts) == 4:
-            raw_x, raw_y, attributes = parts[1:]
-            x, y = int(raw_x), int(raw_y)  # pylint: disable=invalid-name
+        if 3 <= len(parts) <= 4:
+            x, y = [int(part) for part in parts[1:3]]  # pylint: disable=invalid-name
+            attributes = parts[3] if len(parts) > 3 else ""
             n_roll, n_keep = max(x, y), min(x, y)
             if sanity_check_roll(n_roll, n_keep, attributes=attributes):
                 await on_roll(message, n_roll, n_keep, attributes=attributes)
