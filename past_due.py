@@ -85,9 +85,12 @@ class ResolvedFocusRoll:
     """
     Holds the result of resolving a focus (or phenomenon) roll.
 
-    This
+    This includes the rerolls (as rolls) and the reroll coutns for each die.
+    It also includes the number of twos rolled in the rerolling process (the
+    phenomenality).
     """
     rolls: Sequence[int]
+    reroll_counts: Sequence[int]
     phenomenality: int
 
 
@@ -102,17 +105,20 @@ def calculate_focus_roll(rolls: Sequence[int], attributes: str) -> ResolvedFocus
     #
     # I include "or 10" in case of non-exploding focus rolls.
     new_rolls = []
+    reroll_counts = []
     phenomenality = 0
     if "f" in attributes:
         for roll in rolls:
             print()
             reroll = roll
+            reroll_count = 0
             # Note that because rolls only explode on a 10, we can write
             # (re)roll = 10 * q + r, where q is the number of explosions
             # and 1 <= r < 10 is the last number rolled. Thus modding by 10 gives
             # us r, the last number rolled.
             while (reroll % 10) == 2:
                 phenomenality += 1
+                reroll_count += 1
                 # Reroll with explosions... I assume that's how this is supposed to
                 # work, because the rules don't say otherwise.
                 die = roll_die(explodes=True)
@@ -120,10 +126,13 @@ def calculate_focus_roll(rolls: Sequence[int], attributes: str) -> ResolvedFocus
                 # doesn't count towards the total.
                 reroll += die - 2
             new_rolls.append(reroll)
+            reroll_counts.append(reroll_count)
     else:
         new_rolls = rolls
+        reroll_counts = [0 for _ in rolls]
 
     return ResolvedFocusRoll(
         rolls=tuple(new_rolls),
+        reroll_counts=tuple(reroll_counts),
         phenomenality=phenomenality,
     )
