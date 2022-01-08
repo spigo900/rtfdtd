@@ -48,7 +48,7 @@ async def on_roll(message: discord.Message, n_roll: int, n_keep: int) -> None:
     value = calculate_value(rolls, n_keep)
     await message.channel.send(
         f"Rolled: {value}\n\n"
-        f"(sorted rolls {', '.join(sorted(rolls))} || roll order {', '.join(rolls)})"
+        f"(sorted rolls {', '.join(str(roll) for roll in sorted(rolls, reverse=True))} || roll order {', '.join(str(roll) for roll in rolls)})"
     )
 
 
