@@ -88,20 +88,24 @@ async def on_roll(
 
     This handles rolling things like skill checks.
     """
-    rolls = roll_dice(n_roll, explodes=n_keep > 0)
-    focus_roll = calculate_focus_roll(rolls, attributes)
-    rolls = focus_roll.rolls
-    bad_things = stress_check_for_bad_things(rolls, n_keep, attributes=attributes)
-    value = calculate_value(rolls, n_keep, attributes=(2 ** focus_roll.phenomenality) * attributes)
+    base_rolls = roll_dice(n_roll, explodes=n_keep > 0)
+    focus_roll = calculate_focus_roll(base_rolls, attributes)
+    bad_things = stress_check_for_bad_things(focus_roll.rolls, n_keep, attributes=attributes)
+    value = calculate_value(focus_roll.rolls, n_keep, attributes=(2 ** focus_roll.phenomenality) * attributes)
     flag_messages = []
     if focus_roll.phenomenality > 0:
-        flag_messages.append(f"phenomal! {focus_roll.phenomenality} twos.")
+        flag_messages.append(
+            f"phenomal! {focus_roll.phenomenality} twos. "
+            f"twos rerolled per dice: "
+            f"{', '.join(str(count) for count in focus_roll.reroll_counts)}"
+        )
     if bad_things:
         flag_messages.append("stress, bad things!")
     await message.channel.send(
         f"Rolled: {value}{' (' + ' '.join(flag_messages) + ')' if flag_messages else ''}\n\n"
-        f"(sorted rolls {', '.join(str(roll) for roll in sorted(rolls, reverse=True))} "
-        f"|| roll order {', '.join(str(roll) for roll in rolls)})"
+        f"(sorted rolls {', '.join(str(roll) for roll in sorted(focus_roll.rolls, reverse=True))}\n"
+        f"|| roll order {', '.join(str(roll) for roll in focus_roll.rolls)}\n"
+        f"|| before applying F attribute {', '.join(str(roll) for roll in base_rolls)})"
     )
 
 
