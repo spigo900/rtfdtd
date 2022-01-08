@@ -1,6 +1,6 @@
 import random
 
-from dtd import roll_dice, calculate_value
+from dtd import roll_dice, calculate_value, stress_check_for_bad_things
 
 
 def test_roll_die():
@@ -35,7 +35,7 @@ def test_calculate_value_with_simple():
     assert calculate_value([6, 6, 6, 1, 4, 2], 3, attributes="o") == 18
     assert calculate_value([10, 6, 6, 1, 4, 2], 3, attributes="x") == 44
     assert calculate_value([6, 10, 6, 1, 4, 2], 3, attributes="/") == 7
-    assert calculate_value([1, 1, 1, 6, 6, 6], 1, attributes="//") == 3
+    assert calculate_value([1, 1, 1, 6, 6, 6], 1, attributes="//") == 1
     assert calculate_value([6, 6, 6, 1, 4, 2], 1, attributes="xx") == 24
     assert calculate_value([10, 6, 6, 1, 4, 2], 1, attributes="++") == 18
     assert calculate_value([6, 10, 6, 1, 4, 2], 1, attributes="--") == 2
