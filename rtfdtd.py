@@ -23,7 +23,7 @@ async def on_ready() -> None:
 @client.event
 async def on_message(message: discord.Message) -> None:
     "Hook for when anyone in a participating guild sends a message."
-    if not message.is_command:
+    if not message.content.startswith("!"):
         return
 
     if message.content.startswith("/roll"):
