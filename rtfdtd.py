@@ -6,7 +6,7 @@ from pathlib import Path
 
 import discord
 
-from dtd import roll_d100, roll_dice, calculate_value, stress_check_for_bad_things, SIDES
+from dtd import roll_d100, roll_dice, calculate_value, stress_check_for_bad_things, calculate_phenomenality
 
 
 CONFIG_PATH = Path("./config.json")
@@ -80,11 +80,10 @@ async def on_roll(message: discord.Message, n_roll: int, n_keep: int, *, attribu
     """
     rolls = roll_dice(n_roll, explodes=n_keep > 0)
     bad_things = stress_check_for_bad_things(rolls, n_keep, attributes=attributes)
-    phenomenon_roll = "f" in attributes
-    n_twos = len([roll for roll in rolls if (roll % SIDES) == 2])
-    value = calculate_value(rolls, n_keep, attributes=((2 ** n_twos) if phenomenon_roll else 1) * attributes)
+    phenomenality = calculate_phenomenality(rolls, attributes)
+    value = calculate_value(rolls, n_keep, attributes=(2 ** phenomenality) * attributes)
     flag_messages = []
-    if phenomenon_roll and n_twos > 0:
+    if phenomenality > 0:
         flag_messages.append("phenomal!")
     if bad_things:
         flag_messages.append("stress, bad things!")

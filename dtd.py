@@ -73,3 +73,13 @@ def _num_ones_for_stress(n_roll: int, n_keep: int) -> int:
     """
     print("DEBUG:", max(ceil(n_roll / 2), n_keep))
     return max(ceil(n_roll / 2), n_keep)
+
+
+def calculate_phenomenality(rolls: Sequence[int], attributes: str) -> int:
+    """
+    Calculate the phenomenality of the given roll.
+
+    For a phenomenal roll (i.e. one with the F modifier), the phenomenality is
+    the number of twos rolled. For all others the phenomenality is 0.
+    """
+    return len([roll for roll in rolls if (roll % SIDES) == 2]) if "f" in attributes else 0
