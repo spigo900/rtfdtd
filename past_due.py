@@ -107,9 +107,6 @@ def handle_focus_for_roll(rolls: Sequence[int], attributes: str) -> RollWithFocu
     recursively and the phenomenality is the total number of twos rolled
     (including on rerolls).
     """
-    # Calculate phenomenality.
-    #
-    # I include "or 10" in case of non-exploding focus rolls.
     new_rolls = []
     reroll_counts = []
     phenomenality = 0
