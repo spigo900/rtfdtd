@@ -47,6 +47,7 @@ def calculate_value(rolls: Sequence[int], n_keep: int, *, attributes: str = "") 
 
     return _apply_mul(sum(in_order[-n_keep:]) + add_mod, attributes=attributes)
 
+
 def _apply_mul(value_plus_add_mod: int, *, attributes: str) -> int:
     mul_offset = attributes.count("x") - attributes.count("/")
     if mul_offset > 0:
@@ -57,14 +58,18 @@ def _apply_mul(value_plus_add_mod: int, *, attributes: str) -> int:
         return value_plus_add_mod // (3 * -mul_offset)
 
 
-def stress_check_for_bad_things(rolls: Sequence[int], n_keep: int, *, attributes: str) -> bool:
+def stress_check_for_bad_things(
+    rolls: Sequence[int], n_keep: int, *, attributes: str
+) -> bool:
     """
     Check if Bad Things happen due to stress.
 
     This checks for the stress attribute; if it's not present then this always
     returns false.
     """
-    return "s" in attributes and len([x for x in rolls if x == 1]) >= _num_ones_for_stress(len(rolls), n_keep)
+    return "s" in attributes and len(
+        [x for x in rolls if x == 1]
+    ) >= _num_ones_for_stress(len(rolls), n_keep)
 
 
 def _num_ones_for_stress(n_roll: int, n_keep: int) -> int:
@@ -82,4 +87,6 @@ def calculate_phenomenality(rolls: Sequence[int], attributes: str) -> int:
     For a phenomenal roll (i.e. one with the F modifier), the phenomenality is
     the number of twos rolled. For all others the phenomenality is 0.
     """
-    return len([roll for roll in rolls if (roll % SIDES) == 2]) if "f" in attributes else 0
+    return (
+        len([roll for roll in rolls if (roll % SIDES) == 2]) if "f" in attributes else 0
+    )

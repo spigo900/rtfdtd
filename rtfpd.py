@@ -6,7 +6,13 @@ from pathlib import Path
 
 import discord
 
-from past_due import roll_d100, roll_dice, calculate_value, stress_check_for_bad_things, calculate_phenomenality
+from past_due import (
+    roll_d100,
+    roll_dice,
+    calculate_value,
+    stress_check_for_bad_things,
+    calculate_phenomenality,
+)
 
 
 CONFIG_PATH = Path("./config.json")
@@ -72,7 +78,9 @@ def sanity_check_roll(n_roll: int, n_keep: int, *, attributes: str = "") -> bool
     return -10 <= n_roll <= 10 and -9 <= n_keep <= 9 and len(attributes) < 20
 
 
-async def on_roll(message: discord.Message, n_roll: int, n_keep: int, *, attributes: str) -> None:
+async def on_roll(
+    message: discord.Message, n_roll: int, n_keep: int, *, attributes: str
+) -> None:
     """
     Logic for the d10-rolling parts of the /roll command.
 
