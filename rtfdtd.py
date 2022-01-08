@@ -16,6 +16,9 @@ HELP = """Commands: !roll (aka !r), !help
 - Use !r X Y [attributes] to make a normal Past Due roll.
 - Use !r d100 to roll a d100."""
 NAUGHTY = "... Nice try."
+BAD_ROLL_COMMAND = """Unrecognized roll command syntax.
+
+Reminder: syntax is !r X Y [attributes] or !r d100."""
 
 client = discord.Client()
 
@@ -58,6 +61,8 @@ async def on_message(message: discord.Message) -> None:
         # Command looks like d100
         elif parts[1] == "d100":
             await on_d100(message)
+        else:
+            await message.channel.send(BAD_ROLL_COMMAND)
 
 
 def sanity_check_roll(n_roll: int, n_keep: int, *, attributes: str = "") -> bool:
