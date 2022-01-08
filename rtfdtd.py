@@ -37,14 +37,25 @@ async def on_message(message: discord.Message) -> None:
     elif message.content.startswith("!roll") or message.content.startswith("!r"):
         print(f"Got roll command: {message.content}")
         parts = message.content.lower().strip().split()
-        roll_expr = parts[1]
 
-        if "k" in parts[1]:
-            n_roll, n_keep = [int(subexpr) for subexpr in roll_expr.split("k")]
+        # Command is of the form !r X Y attributes
+        if len(parts) == 4:
+            raw_x, raw_y, attributes = parts[1:]
+            x, y = int(raw_x), int(raw_y)
+            n_roll, n_keep = min(x, y), max(x, y)
             if sanity_check_roll(n_roll, n_keep, attributes=attributes):
-                await on_roll(message, n_roll, n_keep)
+                await on_roll(message, n_roll, n_keep, attributes=attributes)
             else:
                 print(NAUGHTY)
+        # Command looks like !r 6k2. (Legacy command.)
+        elif "k" in parts[1]:
+            n_roll, n_keep = [int(subexpr) for subexpr in parts[1].split("k")]
+            attributes = parts[2] if len(parts) >= 3 else ""
+            if sanity_check_roll(n_roll, n_keep, attributes=attributes):
+                await on_roll(message, n_roll, n_keep, attributes=attributes)
+            else:
+                print(NAUGHTY)
+        # Command looks like d100
         elif parts[1] == "d100":
             await on_d100(message)
 
@@ -53,14 +64,14 @@ def sanity_check_roll(n_roll: int, n_keep: int, *, attributes: str = "") -> bool
     return -10 <= n_roll < 10 and -9 <= n_keep <= 9 and len(attributes) < 20
 
 
-async def on_roll(message: discord.Message, n_roll: int, n_keep: int) -> None:
+async def on_roll(message: discord.Message, n_roll: int, n_keep: int, *, attributes: str) -> None:
     """
     Logic for the d10-rolling parts of the /roll command.
 
     This handles rolling things like skill checks.
     """
     rolls = roll_dice(n_roll, explodes=n_keep > 0)
-    value = calculate_value(rolls, n_keep)
+    value = calculate_value(rolls, n_keep, attributes=attributes)
     await message.channel.send(
         f"Rolled: {value}\n\n"
         f"(sorted rolls {', '.join(str(roll) for roll in sorted(rolls, reverse=True))} || roll order {', '.join(str(roll) for roll in rolls)})"
