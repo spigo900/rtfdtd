@@ -15,6 +15,7 @@ HELP = """Commands: !roll (aka !r), !help
 
 - Use !r X Y [attributes] to make a normal Past Due roll.
 - Use !r d100 to roll a d100."""
+NAUGHTY = "... Nice try."
 
 client = discord.Client()
 
@@ -40,9 +41,16 @@ async def on_message(message: discord.Message) -> None:
 
         if "k" in parts[1]:
             n_roll, n_keep = [int(subexpr) for subexpr in roll_expr.split("k")]
-            await on_roll(message, n_roll, n_keep)
+            if sanity_check_roll(n_roll, n_keep, attributes=attributes):
+                await on_roll(message, n_roll, n_keep)
+            else:
+                print(NAUGHTY)
         elif parts[1] == "d100":
             await on_d100(message)
+
+
+def sanity_check_roll(n_roll: int, n_keep: int, *, attributes: str = "") -> bool:
+    return -10 <= n_roll < 10 and -9 <= n_keep <= 9 and len(attributes) < 20
 
 
 async def on_roll(message: discord.Message, n_roll: int, n_keep: int) -> None:
