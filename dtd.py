@@ -39,7 +39,6 @@ def calculate_value(rolls: Sequence[int], n_keep: int, *, attributes: str = "") 
     """
     Calculate the value of a dice roll, given the rolls and number to keep.
     """
-    print("CALCULATING VALUE")
     in_order = sorted(rolls)
     effective_negatives = max(attributes.count("-") - attributes.count("o"), 0)
     add_mod = 4 * (attributes.count("+") - effective_negatives)
@@ -53,5 +52,4 @@ def _apply_mul(value_plus_add_mod: int, *, attributes: str) -> int:
     elif mul_offset == 0:
         return value_plus_add_mod
     else:
-        print(f"value is {value_plus_add_mod}")
         return value_plus_add_mod // (3 * -mul_offset)
