@@ -101,12 +101,19 @@ async def on_roll(
         )
     if bad_things:
         flag_messages.append("stress, bad things!")
-    await message.channel.send(
+    reply = (
         f"Rolled: {value}{' (' + ' '.join(flag_messages) + ')' if flag_messages else ''}\n\n"
         f"(sorted rolls {', '.join(str(roll) for roll in sorted(focus_roll.rolls, reverse=True))}\n"
-        f"| roll order {', '.join(str(roll) for roll in focus_roll.rolls)}\n"
-        f"| before applying F attribute {', '.join(str(roll) for roll in base_rolls)})"
+        f"| roll order {', '.join(str(roll) for roll in focus_roll.rolls)}"
     )
+    if focus_roll.phenomenality > 0:
+        reply += (
+            f"\n| before applying F attribute "
+            f"{', '.join(str(roll) for roll in base_rolls)})"
+        )
+    else:
+        reply += ")"
+    await message.channel.send(reply)
 
 
 async def on_d100(message: discord.Message) -> None:
