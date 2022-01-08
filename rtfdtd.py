@@ -6,7 +6,7 @@ from pathlib import Path
 
 import discord
 
-from dtd import roll_d100, roll_dice, calculate_value
+from dtd import roll_d100, roll_dice, calculate_value, SIDES
 
 
 CONFIG_PATH = Path("./config.json")
@@ -49,7 +49,7 @@ async def on_message(message: discord.Message) -> None:
             if sanity_check_roll(n_roll, n_keep, attributes=attributes):
                 await on_roll(message, n_roll, n_keep, attributes=attributes)
             else:
-                print(NAUGHTY)
+                await message.channel.send(NAUGHTY)
         # Command looks like !r 6k2. (Legacy command.)
         elif "k" in parts[1]:
             n_roll, n_keep = [int(subexpr) for subexpr in parts[1].split("k")]
@@ -57,7 +57,7 @@ async def on_message(message: discord.Message) -> None:
             if sanity_check_roll(n_roll, n_keep, attributes=attributes):
                 await on_roll(message, n_roll, n_keep, attributes=attributes)
             else:
-                print(NAUGHTY)
+                await message.channel.send(NAUGHTY)
         # Command looks like d100
         elif parts[1] == "d100":
             await on_d100(message)
@@ -79,9 +79,11 @@ async def on_roll(message: discord.Message, n_roll: int, n_keep: int, *, attribu
     This handles rolling things like skill checks.
     """
     rolls = roll_dice(n_roll, explodes=n_keep > 0)
-    value = calculate_value(rolls, n_keep, attributes=attributes)
+    phenomenal = "f" in attributes
+    n_twos = len([roll for roll in rolls if (roll % SIDES) == 2])
+    value = calculate_value(rolls, n_keep, attributes=((2 ** n_twos) if phenomenal else 1) * attributes)
     await message.channel.send(
-        f"Rolled: {value}\n\n"
+        f"Rolled: {value}{' (phenomenal!)' if phenomenal and n_twos > 0 else ''}\n\n"
         f"(sorted rolls {', '.join(str(roll) for roll in sorted(rolls, reverse=True))} || roll order {', '.join(str(roll) for roll in rolls)})"
     )
 
