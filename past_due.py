@@ -76,7 +76,6 @@ def _num_ones_for_stress(n_roll: int, n_keep: int) -> int:
     """
     Calculate the minimum number of ones for a bad effect on a stressed roll.
     """
-    print("DEBUG:", max(ceil(n_roll / 2), n_keep))
     return max(ceil(n_roll / 2), n_keep)
 
 
