@@ -66,6 +66,9 @@ async def on_message(message: discord.Message) -> None:
 
 
 def sanity_check_roll(n_roll: int, n_keep: int, *, attributes: str = "") -> bool:
+    """
+    Check if the given roll command is reasonable so we don't get DoSed. :)
+    """
     return -10 <= n_roll < 10 and -9 <= n_keep <= 9 and len(attributes) < 20
 
 
