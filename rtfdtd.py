@@ -79,11 +79,11 @@ async def on_roll(message: discord.Message, n_roll: int, n_keep: int, *, attribu
     This handles rolling things like skill checks.
     """
     rolls = roll_dice(n_roll, explodes=n_keep > 0)
-    phenomenal = "f" in attributes
+    phenomenon_roll = "f" in attributes
     n_twos = len([roll for roll in rolls if (roll % SIDES) == 2])
     value = calculate_value(rolls, n_keep, attributes=((2 ** n_twos) if phenomenal else 1) * attributes)
     await message.channel.send(
-        f"Rolled: {value}{' (phenomenal!)' if phenomenal and n_twos > 0 else ''}\n\n"
+        f"Rolled: {value}{' (phenomenal!)' if phenomenon_roll and n_twos > 0 else ''}\n\n"
         f"(sorted rolls {', '.join(str(roll) for roll in sorted(rolls, reverse=True))} || roll order {', '.join(str(roll) for roll in rolls)})"
     )
 
